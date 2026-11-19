@@ -203,7 +203,10 @@
     try {
       const r = await fetch('deals.json?t=' + Date.now(), { cache: 'no-store' });
       if (!r.ok) throw new Error(r.status);
+      const first = !data;
       data = await r.json();
+      // Nothing is trending yet and the visitor never picked a tab: start on "最新".
+      if (first && !data.hot.length && !store.get('tab')) tab = 'new';
       render();
       renderStatus();
     } catch {

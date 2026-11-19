@@ -6,6 +6,12 @@
   cross-source match, piracy penalty). 9 tests green.
 - Collector + HTML report. 24 h trial started 2026-11-19 07:17 UTC (pid in `runs/collector.pid`).
 
+- Public site live: https://skot-chen.github.io/deal-radar/ (repo skot-chen/deal-radar, Pages from
+  `gh-pages`). Report shows only 最热 / 最新 (user: scores are confusing). Collector runs with
+  `--publish`: every 10 min it writes `runs/pages/deals.json` and pushes a normal commit to gh-pages
+  (force-push/amend was refused by the safety check — don't reintroduce it).
+- Test fixtures (real Douban pages) are local-only (gitignored); their tests skip in a fresh clone.
+
 ## Findings
 - 什么值得买 RSS: works, ~30 items per fetch, titles include 到手价.
 - Douban: lists readable at first; topic pages (body + comments) answered 403 "没有访问权限" after a
