@@ -145,7 +145,7 @@ async function doubanRound(state, firstRound) {
   if (Date.now() < Date.parse(state.pausedUntil.douban ?? 0)) return;
   const queue = [];
   for (const g of SOURCES.douban) {
-    const list = parseDoubanList(await get(state, `https://www.douban.com/group/${g.id}/discussion?start=0`, 'douban'));
+    const list = parseDoubanList(await get(state, `https://www.douban.com/group/${g.id}/discussion?start=0&type=new`, 'douban'));
     for (const row of list) {
       if (row.pinned || !isDealPost(row.title)) continue;
       const key = `douban:${row.id}`;
