@@ -34,3 +34,12 @@
 - WAITING: user will provide the spare account later. Until then Douban blocks visitors → site shows 0 items.
 - GitHub prior art: gakkiismywife/douban_spider (watches 买组, rotates paid proxies — we won't),
   lesywix/douban_group_spy (needs login cookie, slow).
+
+## 2026-11-19 省钱规则 (now the default view)
+- `data/platforms/*.json` (format in `data/SCHEMA.md`, checked by `node src/rules.js` + tests): 10 platforms,
+  大分类 网购 / 外卖·本地生活 → 平台 → 券 tagged 最划算 / 刚需. Site: `site/rules.js` (today's grab clock,
+  platform browser, stacking calculator). Published as rules.json with the site.
+- Research finding: almost no official rule pages are readable; most items are ⚠️ check (media / guides).
+  No reliable fixed daily release times on any platform → clock shows an honest note. 双11-only times are
+  marked `大促期间`, never `每天`.
+- Next: re-verify before big sales (双12, 年货节, 618); fill times when reliable sources appear.
