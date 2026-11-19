@@ -1,5 +1,5 @@
 // Builds the public deals.json and pushes the site to the gh-pages branch.
-// The gh-pages branch is rewritten as a single commit each time, so the repo history stays small.
+// Each update is a normal commit on the gh-pages branch (no history rewriting).
 import { mkdirSync, writeFileSync, copyFileSync, existsSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -47,17 +47,10 @@ export function publish(state, runs) {
     git(dir, 'remote', 'add', 'origin', REMOTE);
   }
   git(dir, 'add', '-A');
-  const hasCommit = (() => {
-    try {
-      git(dir, 'rev-parse', '--verify', 'HEAD');
-      return true;
-    } catch {
-      return false;
-    }
-  })();
-  const msg = `Update deals ${new Date().toISOString().slice(0, 16)}Z`;
-  git(dir, 'commit', '-q', ...(hasCommit ? ['--amend'] : []), '-m', msg);
-  git(dir, 'push', '-q', '-f', 'origin', 'gh-pages');
+  if (!git(dir, 'status', '--porcelain')) return false; // nothing changed
+  git(dir, 'commit', '-q', '-m', `Update deals ${new Date().toISOString().slice(0, 16)}Z`);
+  git(dir, 'push', '-q', '-u', 'origin', 'gh-pages');
+  return true;
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
