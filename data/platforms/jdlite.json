@@ -1,0 +1,90 @@
+{
+  "id": "jdlite",
+  "name": "京东极速版",
+  "group": "shop",
+  "verified": "2026-11-19",
+  "summary": "没找到极速版改名的公开消息；京东特价版主打低价，大额券与国补请去京东主App。",
+  "stackOrder": [
+    "商品特价 / 直降价",
+    "店铺券 / 商品券",
+    "App内红包（如有）"
+  ],
+  "example": {
+    "title": "买一件特价 29.9 元的日用品",
+    "steps": [
+      { "label": "页面特价", "amount": 29.9 },
+      { "label": "店铺券（举例）", "amount": -3 },
+      { "label": "红包（举例）", "amount": -1.9 }
+    ],
+    "final": 25,
+    "note": "金额是举例，无官方叠加顺序；以结算页为准。"
+  },
+  "coupons": [
+    {
+      "name": "改名情况（请注意）",
+      "tag": "刚需",
+      "what": "没查到“极速版”改名或合并的公开报道。应用商店里有“京东特价版”（前身京喜）。",
+      "howToGet": "在应用商店搜“京东极速版”和“京东特价版”，看App内活动页。",
+      "stack": "两个App规则可能不同，不要混用。",
+      "times": [],
+      "tips": "以下内容里旧攻略居多，规则可能已变。",
+      "status": "check",
+      "sources": [
+        { "title": "京东特价版（App Store）", "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111" }
+      ]
+    },
+    {
+      "name": "签到领现金",
+      "tag": "刚需",
+      "what": "每天签到得随机金额，攒够后提现或抵扣；旧文说首次更高，8元可提现。",
+      "howToGet": "极速版 App → 活动页 → 签到。",
+      "stack": "是现金奖励，不是商品券。",
+      "times": [],
+      "tips": "旧攻略（约2020年），金额和门槛以App内为准。",
+      "status": "check",
+      "sources": [
+        { "title": "京东极速版签到领现金玩法（3DM）", "url": "https://shouyou.3dmgame.com/gl/192188.html" },
+        { "title": "京东极速版正确打开方式（什么值得买）", "url": "https://post.smzdm.com/p/a9gennkp/" }
+      ]
+    },
+    {
+      "name": "特价 / 9.9包邮",
+      "tag": "最划算",
+      "what": "特价版入口有京喜直营、9.9包邮、百亿补贴，主打低价日用品。",
+      "howToGet": "京东特价版 App → 首页入口。",
+      "stack": "是否能再用券看商品页。",
+      "times": [],
+      "tips": "低价商品注意看规格和运费说明。",
+      "status": "check",
+      "sources": [
+        { "title": "京东特价版（App Store）", "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111" }
+      ]
+    },
+    {
+      "name": "商品券（通用规则）",
+      "tag": "刚需",
+      "what": "京东商品券只能抵商品金额，不能抵运费，不能提现。",
+      "howToGet": "商品页或券入口领取。",
+      "stack": "每件商品只能用一张券；同单可用几种券。",
+      "times": [],
+      "tips": "这是京东通用规则，极速版是否完全一样请看券说明。",
+      "status": "check",
+      "sources": [
+        { "title": "京东帮助中心：优惠券规则", "url": "https://help.jd.com/user/issue/169-1077.html" }
+      ]
+    },
+    {
+      "name": "国补 / 大额券要去主App",
+      "tag": "最划算",
+      "what": "2026年文章称：国补、学生券、大额满减券只有京东主App支持，极速版和小程序不行。",
+      "howToGet": "买数码、家电，请用京东主App。",
+      "stack": "极速版里领的大额券结算时可能无法使用。",
+      "times": [],
+      "tips": "买大件前先在主App对比价格。",
+      "status": "check",
+      "sources": [
+        { "title": "京东优惠券攻略2026（新浪）", "url": "https://finance.sina.cn/2026-08-31/detail-iniqexuv8978332.d.html?vt=4" }
+      ]
+    }
+  ]
+}

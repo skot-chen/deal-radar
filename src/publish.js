@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { heat, isHidden } from './report.js';
 import { categorize, ALL_CATEGORIES } from './category.js';
+import { buildRules } from './rules.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REMOTE = 'https://github.com/skot-chen/deal-radar.git';
@@ -50,6 +51,8 @@ export function publish(state, runs) {
   const dir = join(runs, 'pages');
   mkdirSync(dir, { recursive: true });
   copyFileSync(join(ROOT, 'site', 'index.html'), join(dir, 'index.html'));
+  copyFileSync(join(ROOT, 'site', 'rules.js'), join(dir, 'rules.js'));
+  writeFileSync(join(dir, 'rules.json'), JSON.stringify(buildRules()));
   writeFileSync(join(dir, 'deals.json'), JSON.stringify(buildDeals(state)));
   writeFileSync(join(dir, '.nojekyll'), '');
   if (!existsSync(join(dir, '.git'))) {

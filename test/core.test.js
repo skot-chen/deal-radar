@@ -134,3 +134,18 @@ test('more categories and "30+" prices', () => {
   assert.equal(extractPrice('【作业】刷券30+买keep 4kg*2铸铁哑铃'), 30);
   assert.equal(extractPrice('【作业】微信支付摇优惠送免费瑞幸1+4杯'), null);
 });
+
+import { loadPlatforms, validatePlatform } from '../src/rules.js';
+test('every platform rules file follows the schema', () => {
+  const all = loadPlatforms();
+  assert.ok(all.length >= 1);
+  for (const p of all) assert.deepEqual(validatePlatform(p), [], p.id);
+});
+test('rules validator catches bad data', () => {
+  const bad = { id: 'jd', name: '京东', group: 'shop', verified: '2026-11-19', summary: 'x', stackOrder: ['a'],
+    example: { title: 't', steps: [{ label: '原价', amount: 100 }, { label: '券', amount: -10 }], final: 80 },
+    coupons: [{ name: 'c', tag: '便宜', what: 'w', howToGet: 'h', stack: 's', status: 'ok', times: [{ when: '每天', time: '10点' }],
+      sources: [{ title: 's', url: 'https://u.jd.com/abc' }] }] };
+  const errs = validatePlatform(bad).join('\n');
+  for (const k of ['adds up', 'tag', 'affiliate', 'time']) assert.match(errs, new RegExp(k));
+});

@@ -1,0 +1,122 @@
+{
+  "id": "meituan-waimai",
+  "name": "美团外卖",
+  "group": "local",
+  "verified": "2026-11-19",
+  "summary": "只管外卖频道：天天神券先膨胀，每单只能用一张红包",
+  "stackOrder": [
+    "店铺满减 / 商品折扣",
+    "平台红包（天天神券，每单只能用一张）",
+    "配送费减免（有活动时）",
+    "支付立减 / 银行卡优惠（以结算页为准）"
+  ],
+  "example": {
+    "title": "点一单外卖，商品42元",
+    "steps": [
+      { "label": "商品原价", "amount": 42 },
+      { "label": "店铺满减", "amount": -6 },
+      { "label": "膨胀后的神券（38减18）", "amount": -18 },
+      { "label": "配送费", "amount": 3 }
+    ],
+    "final": 21,
+    "note": "数字是举例；神券门槛按什么金额算、能否叠满减，以结算页为准"
+  },
+  "coupons": [
+    {
+      "name": "天天神券",
+      "tag": "刚需",
+      "what": "外卖平台红包的一种，只能在参加“天天神券”的商家使用，要满足门槛。",
+      "howToGet": "美团外卖App → 底部“神券”页；或 我的 → 红包 → 去使用",
+      "stack": "官方规则：每单只能用一张红包，不能叠加或拆分，自取单不能用",
+      "times": [],
+      "tips": "有效期常很短（攻略说1到3天），先看“我的红包”里的到期时间。",
+      "status": "ok",
+      "sources": [
+        { "title": "美团外卖优惠规则（官方）", "url": "https://i.waimai.meituan.com/c/discount_rules/index.html?terminal=mtapp" }
+      ]
+    },
+    {
+      "name": "膨胀神券",
+      "tag": "最划算",
+      "what": "小额券（如5元）先免费膨胀，再下单。平日可膨胀成38减18，周末面额更大。",
+      "howToGet": "美团外卖App → 神券页 / 周末“半价周末”入口 → 点膨胀",
+      "stack": "膨胀后的券仍算一张红包；拼好饭不能用神券",
+      "times": [],
+      "tips": "先膨胀到满意面额再付款。膨胀后可能只限带“膨胀”标签的商家。",
+      "status": "ok",
+      "sources": [
+        { "title": "IT之家：美团神券规则（2026-04）", "url": "https://www.ithome.com/0/943/430.htm" },
+        { "title": "IT之家：5元膨胀神券", "url": "https://www.ithome.com/0/910/016.htm" }
+      ]
+    },
+    {
+      "name": "每日签到领神券",
+      "tag": "刚需",
+      "what": "每天签到开宝箱，随机得神券，连签7天有额外奖励（攻略说法）。",
+      "howToGet": "美团外卖App → 底部“神券” → 页面下方签到区",
+      "stack": "签到券和天天神券都是平台通用红包，每单只能用一张",
+      "times": [],
+      "tips": "有攻略说宝箱每天0点刷新，但官方没公布，所以不写死时间。",
+      "status": "check",
+      "sources": [
+        { "title": "知乎：美团外卖神券签到攻略（2026-04）", "url": "https://www.zhihu.com/tardis/jm/art/2023781428685456740" }
+      ]
+    },
+    {
+      "name": "美团会员红包（原神会员）",
+      "tag": "最划算",
+      "what": "付费会员每月发一批无门槛小额红包，常点外卖的人更划算。",
+      "howToGet": "美团外卖App → 我的 / 神券页 → 会员入口开通",
+      "stack": "和天天神券是否同单叠加说法不一，下单看结算页",
+      "times": [],
+      "tips": "价格和张数常变，没有官方固定日期；算好每月点单次数再买。",
+      "status": "check",
+      "sources": [
+        { "title": "IT之家：美团会员升级报道", "url": "https://www.ithome.com/0/910/016.htm" },
+        { "title": "知乎：美团会员与神会员（旧文）", "url": "https://www.zhihu.com/tardis/jm/art/2023011057615021698" }
+      ]
+    },
+    {
+      "name": "神抢手",
+      "tag": "最划算",
+      "what": "美团精选的高口碑商家低价商品专区，常有大额券和低价商品。",
+      "howToGet": "美团外卖App → 首页 → 神抢手入口",
+      "stack": "以商品页和结算页提示为准",
+      "times": [],
+      "tips": "2025年美团提高了入驻门槛，质量更稳；限量商品要及时抢。",
+      "status": "check",
+      "sources": [
+        { "title": "IT之家：神抢手发券事件", "url": "https://www.ithome.com/0/873/547.htm" },
+        { "title": "每日经济新闻：外卖补贴报道（2025-07）", "url": "https://www.nbd.com.cn/articles/2025-07-13/3942282.html" }
+      ]
+    },
+    {
+      "name": "店铺满减 / 店铺券",
+      "tag": "刚需",
+      "what": "商家自己设的满多少减多少，下单时通常自动用上。",
+      "howToGet": "美团外卖App → 进店铺 → 看顶部满减 / 领店铺券",
+      "stack": "一般能和平台红包一起用；每单一张红包的限制仍在",
+      "times": [],
+      "tips": "2025年美团取消了拼单满减等十几项商家活动，满减规则更简单了。",
+      "status": "ok",
+      "sources": [
+        { "title": "新华网：美团精简商家营销活动（2026-02）", "url": "https://www.news.cn/tech/20260206/c7b07567faaa46eeb610a25e6b8718ae/c.html" }
+      ]
+    },
+    {
+      "name": "拼好饭",
+      "tag": "最划算",
+      "what": "标准套餐集中配送，价格比普通外卖低很多，主打10到15元。",
+      "howToGet": "美团外卖App → 搜“拼好饭” → 频道页领券下单",
+      "stack": "不能叠神券；红包和配送费规则以频道页为准",
+      "times": [],
+      "tips": "已经很便宜，不用再花时间找券；只是不能叠神券。",
+      "status": "check",
+      "sources": [
+        { "title": "IT之家：美团神券规则（拼好饭不叠）", "url": "https://www.ithome.com/0/943/430.htm" },
+        { "title": "人人都是产品经理：拼好饭介绍", "url": "https://www.woshipm.com/it/6253081.html" },
+        { "title": "App Store：美团（拼好饭0配送费介绍）", "url": "https://apps.apple.com/hk/app/app/id737310995" }
+      ]
+    }
+  ]
+}

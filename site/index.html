@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>线报雷达</title>
-<meta name="description" content="自动收集省钱作业：豆瓣买组、拼组和什么值得买的最新、最热线报，已去掉返利链接。">
+<meta name="description" content="淘宝、天猫、1688、京东、拼多多、美团、饿了么的券怎么领、几点抢、怎么叠加最划算；另有豆瓣买组拼组最新线报。">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="线报雷达">
 <meta name="theme-color" content="#eef2e6" media="(prefers-color-scheme: light)">
@@ -124,6 +124,83 @@
   .price small { display: block; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 11px; font-weight: 400; color: var(--red); margin-top: 2px; }
 
   .empty { padding: 24px 0; color: var(--pencil); }
+
+  /* ---------- view switch ---------- */
+  .views { display: flex; gap: 8px; margin: 20px 0 4px; border-bottom: 2px solid var(--ink); }
+  .views a {
+    color: var(--pencil); text-decoration: none; font-weight: 700; font-size: 17px;
+    padding: 8px 14px 6px; border-radius: 10px 10px 0 0; border: 2px solid transparent; border-bottom: none; margin-bottom: -2px;
+  }
+  .views a[aria-selected="true"] { color: var(--ink); background: var(--paper); border-color: var(--ink); }
+  .views a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  h2 { font-family: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif; font-weight: 900; font-size: 21px; line-height: 1.3; margin: 0; }
+  h2.sect { margin: 28px 0 10px; }
+  .src.big button { font-size: 15px; font-weight: 700; padding: 3px 14px; }
+
+  /* ---------- today's grab clock ---------- */
+  .today { margin-top: 18px; }
+  .today .hint { margin: 4px 0 8px; }
+  .clock li { grid-template-columns: 74px 1fr; gap: 2px 12px; padding: 9px 0; }
+  .clock .t {
+    grid-row: 1 / span 2; align-self: center; font-family: "Caveat", "Segoe Print", cursive; font-weight: 700;
+    font-size: 30px; line-height: 1; color: var(--red); text-align: right;
+  }
+  .clock li.past .t { color: var(--pencil); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .clock li.next .t::after { content: "下一场"; display: block; font: 700 11px/1.4 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: var(--red); }
+  .clock .w { font-weight: 700; }
+  .clock .w small { font-weight: 400; color: var(--pencil); margin-left: 6px; }
+  .clock .d { grid-column: 2; font-size: 13px; color: var(--pencil); }
+  .more { font: inherit; font-size: 14px; color: var(--ink); background: none; border: none; padding: 8px 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--red); }
+
+  /* ---------- platform card ---------- */
+  .pcard { margin-top: 8px; }
+  .pcard .sum { font-size: 15px; margin: 8px 0 14px; }
+  .pcard h3 { font-size: 16px; margin: 18px 0 6px; }
+  .order { counter-reset: s; margin: 0; padding: 0; }
+  .order li { display: block; padding: 4px 0 4px 34px; border: none; position: relative; }
+  .order li::before {
+    counter-increment: s; content: counter(s); position: absolute; left: 0; top: 5px; width: 24px; height: 24px; border-radius: 50%;
+    border: 2px solid var(--red); color: var(--red); font: 700 13px/20px -apple-system, sans-serif; text-align: center;
+  }
+  .receipt { border: 1.5px dashed var(--pencil); border-radius: 6px; padding: 10px 14px; background: var(--paper); max-width: 380px; }
+  .receipt .rt { font-weight: 700; margin-bottom: 4px; }
+  .receipt .row { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+  .receipt .row.minus span:last-child { color: var(--red); }
+  .receipt .row.total { border-top: 1.5px solid var(--ink); margin-top: 4px; padding-top: 4px; font-weight: 700; }
+  .receipt .row.total span:last-child { font-family: "Caveat", cursive; font-size: 26px; color: var(--red); line-height: 1; }
+  .receipt .note { font-size: 12px; color: var(--pencil); margin-top: 4px; }
+  .coupons li { display: block; padding: 14px 0; }
+  .coupons .nm { font-weight: 700; font-size: 17px; }
+  .stamp {
+    display: inline-block; font-size: 12px; font-weight: 700; padding: 0 7px; margin-left: 8px; border-radius: 4px; vertical-align: 2px;
+    border: 1.5px solid var(--ink); color: var(--ink);
+  }
+  .stamp.hot { border-color: var(--red); color: var(--red); transform: rotate(-3deg); }
+  .stamp.check { border-color: var(--pencil); color: var(--pencil); border-style: dashed; }
+  .coupons dl { margin: 6px 0 0; display: grid; grid-template-columns: 52px 1fr; gap: 3px 10px; font-size: 14px; }
+  .coupons dt { color: var(--pencil); }
+  .coupons dd { margin: 0; }
+  .coupons .tm { color: var(--red); font-weight: 700; }
+  .coupons .srcs { font-size: 12px; color: var(--pencil); margin-top: 6px; overflow-wrap: anywhere; }
+  .coupons .srcs a { color: var(--pencil); }
+
+  /* ---------- calculator ---------- */
+  .calc { margin-top: 30px; border-top: 2px solid var(--ink); padding-top: 10px; }
+  .calc summary { cursor: pointer; font-weight: 700; font-size: 17px; padding: 6px 0; }
+  .calc summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .calc label { display: block; font-size: 14px; color: var(--pencil); margin: 10px 0 4px; }
+  .calc input, .calc select {
+    font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1.5px solid var(--rule); border-radius: 8px;
+    padding: 6px 10px; min-height: 40px;
+  }
+  .calc input:focus-visible, .calc select:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+  .calc .line { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+  .calc .line input { width: 84px; }
+  .calc .line .x { font: inherit; background: none; border: none; color: var(--red); font-size: 20px; cursor: pointer; padding: 0 6px; min-height: 40px; }
+  .calc .add { font: inherit; font-weight: 700; color: var(--ink); background: var(--tab); border: 1.5px solid var(--rule); border-radius: 10px; padding: 6px 14px; cursor: pointer; margin-top: 6px; min-height: 40px; }
+  .calc .out { margin-top: 14px; }
+  .calc .tip { font-size: 14px; color: var(--red); margin-top: 6px; }
+  .foot-note { font-size: 13px; color: var(--pencil); }
   footer { margin-top: 28px; font-size: 13px; color: var(--pencil); }
   footer p { margin: 4px 0; }
   @media (max-width: 420px) {
@@ -138,13 +215,38 @@
 <div class="page">
   <header>
     <h1>线报雷达</h1>
-    <p class="lede">自动收集豆瓣买组、拼组的省钱作业，按分类整理好。返利链接和口令已经去掉，点开就是原帖。</p>
-    <div class="statusbar">
-      <p class="status" id="status" role="status">正在载入…</p>
-      <button type="button" id="refresh">刷新</button>
-    </div>
+    <p class="lede">淘宝、京东、拼多多、美团、饿了么的券怎么领、几点抢、怎么叠加最划算，一页看懂。</p>
   </header>
 
+  <div class="views" role="tablist" aria-label="切换内容">
+    <a href="#rules" role="tab" id="go-rules" aria-selected="true">📘 省钱规则</a>
+    <a href="#deals" role="tab" id="go-deals" aria-selected="false">📰 最新线报</a>
+  </div>
+
+  <section id="rules-view" aria-labelledby="go-rules">
+    <div class="today" id="today">
+      <h2>今天几点抢券</h2>
+      <p class="hint" id="today-hint">正在载入…</p>
+      <ol class="clock" id="clock"></ol>
+    </div>
+
+    <h2 class="sect">按平台查</h2>
+    <div class="src big" id="r-group" role="group" aria-label="大分类"></div>
+    <div class="src" id="r-plat" role="group" aria-label="平台"></div>
+    <div class="src" id="r-tag" role="group" aria-label="券的类型"></div>
+    <div id="platform"></div>
+
+    <details class="calc" id="calc">
+      <summary>🧮 叠加计算器：算算到手多少钱</summary>
+      <div id="calc-body"></div>
+    </details>
+  </section>
+
+  <section id="deals-view" aria-labelledby="go-deals" hidden>
+  <div class="statusbar">
+    <p class="status" id="status" role="status">正在载入…</p>
+    <button type="button" id="refresh">刷新</button>
+  </div>
   <nav role="tablist" aria-label="排序" id="tabs">
     <button role="tab" id="tab-hot" aria-selected="true" aria-controls="list">🔥 最热</button>
     <button role="tab" id="tab-new" aria-selected="false" aria-controls="list">🆕 最新</button>
@@ -158,12 +260,15 @@
     <span id="pageinfo"></span>
     <button type="button" id="next">下一页</button>
   </div>
+  <p class="foot-note">线报到手价是从帖子标题里自动读出来的，下单前请以页面实际价格为准。</p>
+  </section>
 
   <footer>
-    <p>到手价是从帖子标题里自动读出来的，下单前请以页面实际价格为准。</p>
-    <p>每几分钟自动更新一次；本页不会自动帮你下单或抢券。</p>
+    <p>规则来自各平台公开的活动说明和新闻，每条都写了核实日期和来源。平台常常调整，标 ⚠️ 的请以 App 里为准。</p>
+    <p>本页只整理信息，不会帮你下单或抢券，也没有任何返利链接。</p>
   </footer>
 </div>
+<script src="rules.js" defer></script>
 
 <script>
 (() => {

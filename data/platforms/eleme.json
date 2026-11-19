@@ -1,0 +1,130 @@
+{
+  "id": "eleme",
+  "name": "饿了么（淘宝闪购：超市·药品·便利）",
+  "group": "local",
+  "verified": "2026-11-19",
+  "summary": "只管超市、药品、便利店这类非餐：看会员、金币。点餐看“饿了么外卖”",
+  "stackOrder": [
+    "商品折扣 / 店铺满减",
+    "店铺券或平台红包（同类红包一般只能用一个）",
+    "淘金币抵扣（有就一起用）",
+    "88VIP 等会员权益（以结算页为准）"
+  ],
+  "example": {
+    "title": "买日用品，凑单45元",
+    "steps": [
+      {
+        "label": "商品原价",
+        "amount": 45
+      },
+      {
+        "label": "店铺满减",
+        "amount": -5
+      },
+      {
+        "label": "平台红包",
+        "amount": -4
+      },
+      {
+        "label": "淘金币抵扣",
+        "amount": -1
+      },
+      {
+        "label": "配送费",
+        "amount": 2
+      }
+    ],
+    "final": 37,
+    "note": "数字是举例，不是实际报价；红包面额和门槛以结算页为准"
+  },
+  "coupons": [
+    {
+      "name": "淘宝闪购通用红包",
+      "tag": "刚需",
+      "what": "进入淘宝闪购会弹出红包，金额随机，几元到十几元，下单时抵用。",
+      "howToGet": "淘宝App → 首页顶部“闪购”；或饿了么（淘宝闪购）App → 首页领取",
+      "stack": "平台红包可叠店铺券；同类红包一般只能用一个",
+      "times": [],
+      "tips": "第三方说每天可领一次，大促金额更高；没有官方固定时间。",
+      "status": "check",
+      "sources": [
+        {
+          "title": "蓝胖子线报圈：淘宝闪购红包怎么领（第三方）",
+          "url": "https://www.lpzxbq.cn/ywjd/1771.html"
+        },
+        {
+          "title": "深圈圈：淘宝闪购红包入口（第三方）",
+          "url": "https://www.shenquanquan.com/posts/taobao-flash-hongbao-meitian-ling/"
+        }
+      ]
+    },
+    {
+      "name": "店铺满减 / 店铺券",
+      "tag": "刚需",
+      "what": "超市、药店、便利店自己设的满减，下单时自动匹配，一般每单省1到8元。",
+      "howToGet": "进入店铺 → 看顶部满减；下单时自动用",
+      "stack": "可和平台红包叠加，先算满减再用红包",
+      "times": [],
+      "tips": "买药或日用品时，凑到满减门槛，比单买一件划算。",
+      "status": "check",
+      "sources": [
+        {
+          "title": "深圈圈：淘宝闪购红包入口（第三方）",
+          "url": "https://www.shenquanquan.com/posts/taobao-flash-hongbao-meitian-ling/"
+        }
+      ]
+    },
+    {
+      "name": "淘金币抵扣",
+      "tag": "最划算",
+      "what": "在淘金币频道下闪购订单，实付满30元可额外得金币，金币能抵现金。",
+      "howToGet": "淘宝App → 淘金币 → 闪购入口下单；结算页勾选抵扣",
+      "stack": "可和红包、店铺满减一起用",
+      "times": [],
+      "tips": "金币数量以当时活动为准，2025年的规则可能已变。",
+      "status": "check",
+      "sources": [
+        {
+          "title": "IT之家：88VIP与淘金币报道（2025）",
+          "url": "https://www.ithome.com/0/873/662.htm"
+        }
+      ]
+    },
+    {
+      "name": "88VIP 闪购权益",
+      "tag": "最划算",
+      "what": "88VIP 会员有闪购优惠：2025年有每日免配送费、外卖红包和95折。",
+      "howToGet": "淘宝App → 我的 → 88VIP → 闪购权益",
+      "stack": "报道称可和红包叠加；具体以会员页为准",
+      "times": [],
+      "tips": "2026年的门槛和折扣可能已变，不要为这一项单独买会员。",
+      "status": "check",
+      "sources": [
+        {
+          "title": "界面新闻：88VIP扩展到吃喝零售（2025）",
+          "url": "https://m.jiemian.com/article/13141006.html"
+        },
+        {
+          "title": "IT之家：88VIP与饿了么权益（2025）",
+          "url": "https://www.ithome.com/0/873/662.htm"
+        }
+      ]
+    },
+    {
+      "name": "结算页“预估到手价”",
+      "tag": "刚需",
+      "what": "商品页的预估到手价是估算值，真正的价格以结算页按你实际满足的优惠算出来为准。",
+      "howToGet": "商品页看预估价 → 提交订单页看最终价",
+      "stack": "红包、满减、会员权益都按结算页的实际条件计算",
+      "times": [],
+      "tips": "只买一盒药时配送费占比大，尽量凑单；下单前看最终实付。",
+      "status": "check",
+      "sources": [
+        {
+          "title": "北京新闻网：买药与闪购结算说明",
+          "url": "https://www.bjnews.com.cn/detail/1794191480129214.html"
+        }
+      ]
+    }
+  ]
+}
