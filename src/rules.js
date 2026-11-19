@@ -9,7 +9,7 @@ export const GROUPS = [
   { id: 'shop', name: '🛒 网购' },
   { id: 'local', name: '🍱 外卖·本地生活' },
 ];
-export const ORDER = ['taobao', 'tmall', '1688', 'jd', 'jdlite', 'pdd', 'meituan-waimai', 'meituan', 'eleme-waimai', 'eleme'];
+export const ORDER = ['taobao', 'tmall', '1688', 'jd', 'jdlite', 'pdd', 'meituan-waimai', 'meituan', 'taobao-waimai', 'eleme-waimai', 'eleme'];
 const TAGS = new Set(['最划算', '刚需']);
 
 /** Returns a list of problems (empty = fine). */

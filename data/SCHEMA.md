@@ -5,7 +5,7 @@ Structure on the site: 大分类 (group) → 平台 (platform) → 券 (coupon),
 
 ```jsonc
 {
-  "id": "taobao",                 // taobao | tmall | 1688 | jd | jdlite | pdd | meituan | meituan-waimai | eleme | eleme-waimai
+  "id": "taobao",                 // taobao | tmall | 1688 | jd | jdlite | pdd | meituan | meituan-waimai | taobao-waimai | eleme | eleme-waimai
   "name": "淘宝",
   "group": "shop",                // shop = 网购 | local = 外卖·本地生活
   "verified": "2026-11-19",       // date the facts were checked
