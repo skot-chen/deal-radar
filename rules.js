@@ -105,30 +105,61 @@
     const ex = p.example;
     $('platform').innerHTML = `<article class="pcard">
       <p class="sum">${esc(p.summary)}</p>
-      <h3>结账时的叠加顺序</h3>
-      <ol class="order">${(p.stackOrder || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
-      ${ex ? `<h3>算一笔账</h3><div class="receipt"><div class="rt">${esc(ex.title)}</div>
-        ${ex.steps.map((s) => `<div class="row${s.amount < 0 ? ' minus' : ''}"><span>${esc(s.label)}</span><span>${s.amount < 0 ? '−' + money(-s.amount) : money(s.amount)}</span></div>`).join('')}
-        <div class="row total"><span>到手</span><span>${money(ex.final)}</span></div>
-        ${ex.note ? `<div class="note">${esc(ex.note)}</div>` : ''}</div>` : ''}
-      <h3>有哪些券（${coupons.length}）</h3>
-      <ol class="coupons">${coupons.map(couponHtml).join('') || '<li class="empty">这个类型暂时没有。</li>'}</ol>
+      <ol class="coupons">${coupons.map((c) => couponHtml(c, p)).join('') || '<li class="empty">这个类型暂时没有。</li>'}</ol>
+      <details class="rules">
+        <summary>想知道怎么叠加最省？看结账顺序和算账例子</summary>
+        <ol class="order">${(p.stackOrder || []).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
+        ${ex ? `<div class="receipt"><div class="rt">${esc(ex.title)}</div>
+          ${ex.steps.map((s) => `<div class="row${s.amount < 0 ? ' minus' : ''}"><span>${esc(s.label)}</span><span>${s.amount < 0 ? '−' + money(-s.amount) : money(s.amount)}</span></div>`).join('')}
+          <div class="row total"><span>到手</span><span>${money(ex.final)}</span></div>
+          ${ex.note ? `<div class="note">${esc(ex.note)}</div>` : ''}</div>` : ''}
+      </details>
       <p class="srcs" style="font-size:12px;color:var(--pencil)">核实日期：${esc(p.verified)}</p>
     </article>`;
   }
 
-  function couponHtml(c) {
-    const times = (c.times || []).map((t) => `${t.when} ${t.time}${t.note ? `（${t.note}）` : ''}`).join('；');
+  // "App → 首页 → 领券中心" or a sentence → short do-this steps.
+  function stepsFor(c, p) {
+    const parts = String(c.howToGet || '')
+      .split(/\s*(?:→|->|＞|>|；|;|。)\s*/)
+      .map((s) => s.replace(/^(?:在|进入?|打开)?\s*(?:淘宝|天猫|京东|拼多多|美团外卖|美团|饿了么|1688)?\s*App\s*/i, '').trim())
+      .filter((s) => s && !/^App$/i.test(s));
+    // "店铺首页 → 领券 → 或商品详情页 → 领券": keep the main path, mention the other way once.
+    const alt = parts.findIndex((s) => /^或/.test(s));
+    if (alt > 0) {
+      const other = parts.slice(alt).join(' → ').replace(/^或\s*/, '');
+      parts.splice(alt, parts.length - alt);
+      parts[parts.length - 1] += `（也可以：${other}）`;
+    }
+    const app = p.open?.app || p.name;
+    const first = p.id === 'jdlite' ? '打开京东极速版 App（没有就用京东 App）' : `打开${app} App`;
+    return [first, ...parts].slice(0, 5);
+  }
+
+  function couponHtml(c, p) {
+    const t0 = bjNow();
+    const today = `${t0.y}-${String(t0.m).padStart(2, '0')}-${String(t0.d).padStart(2, '0')}`;
+    // Dated slots that are already over (e.g. last 双11) only confuse people — hide them.
+    const times = (c.times || [])
+      .filter((t) => !/^\d{4}-\d{2}-\d{2}$/.test(t.when) || t.when >= today)
+      .map((t) => `${t.when} ${t.time}${t.note ? `（${t.note}）` : ''}`)
+      .join('；');
+    const app = p.open?.app || p.name;
+    const goLabel = /不用领|自动|不需要领/.test(c.howToGet || '') ? `去${app}看看` : `去${app}领取`;
     return `<li>
-      <div class="nm">${esc(c.name)}<span class="stamp${c.tag === '最划算' ? ' hot' : ''}">${esc(c.tag)}</span>${c.status === 'check' ? '<span class="stamp check">⚠️ 待核实</span>' : ''}</div>
-      <dl>
-        <dt>是什么</dt><dd>${esc(c.what)}</dd>
-        <dt>去哪领</dt><dd>${esc(c.howToGet)}</dd>
-        ${times ? `<dt>几点抢</dt><dd class="tm">${esc(times)}</dd>` : ''}
-        <dt>能叠加</dt><dd>${esc(c.stack)}</dd>
-        ${c.tips ? `<dt>小技巧</dt><dd>${esc(c.tips)}</dd>` : ''}
-      </dl>
-      <div class="srcs">来源：${(c.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>`).join('；')}</div>
+      <div class="nm">${esc(c.name)}<span class="stamp${c.tag === '最划算' ? ' hot' : ''}">${esc(c.tag)}</span>${c.status === 'check' ? '<span class="stamp check">⚠️ 以 App 为准</span>' : ''}</div>
+      <ol class="steps">${stepsFor(c, p).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
+      ${times ? `<p class="when">⏰ ${esc(times)}</p>` : ''}
+      ${p.open ? `<a class="go" href="${esc(p.open.url)}" target="_blank" rel="noopener noreferrer">${esc(goLabel)}</a>` : ''}
+      <details class="why">
+        <summary>能省多少？能和什么一起用？</summary>
+        <dl>
+          <dt>是什么</dt><dd>${esc(c.what)}</dd>
+          <dt>能叠加</dt><dd>${esc(c.stack)}</dd>
+          ${c.tips ? `<dt>小技巧</dt><dd>${esc(c.tips)}</dd>` : ''}
+        </dl>
+        <div class="srcs">来源：${(c.sources || []).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(s.title)}</a>`).join('；')}</div>
+      </details>
     </li>`;
   }
 
