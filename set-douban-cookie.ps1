@@ -1,4 +1,4 @@
-# 保存豆瓣小号的登录信息（Cookie），给线报雷达用。
+﻿# 保存豆瓣小号的登录信息（Cookie），给线报雷达用。
 # Saves the spare Douban account's cookie for the collector. The file stays on this laptop
 # (secrets/ is git-ignored) and is never uploaded to the website.
 $dir = Join-Path $PSScriptRoot 'secrets'
