@@ -1,0 +1,14 @@
+{
+  "name": "deal-radar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "线报雷达：自动收集豆瓣小组 / 什么值得买的优惠作业，去返利链接，算到手价并打分",
+  "scripts": {
+    "start": "node src/collector.js",
+    "once": "node src/collector.js --once",
+    "report": "node src/report.js",
+    "check": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=22" }
+}
