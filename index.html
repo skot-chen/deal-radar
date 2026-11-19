@@ -87,6 +87,7 @@
   }
   .src button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); background: var(--tab); }
   .src .n { font-size: 11px; opacity: .7; }
+  #grp button { font-weight: 700; }
   .tag { color: var(--ink); }
   .pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 0 0; font-size: 14px; color: var(--pencil); }
   .pager[hidden] { display: none; }
@@ -149,6 +150,7 @@
     <button role="tab" id="tab-new" aria-selected="false" aria-controls="list">🆕 最新</button>
   </nav>
   <p class="hint" id="hint"></p>
+  <div class="src" id="grp" role="group" aria-label="按小组看"></div>
   <div class="src" id="cat" role="group" aria-label="按分类看"></div>
   <ol id="list" role="tabpanel" aria-live="polite"></ol>
   <div class="pager" id="pager" hidden>
@@ -173,6 +175,8 @@
   let data = null;
   let tab = store.get('tab') === 'new' ? 'new' : 'hot';
   let cat = store.get('cat') || '';
+  let grp = store.get('grp') || '';
+  const GROUP_NAMES = { 豆瓣买组: '买组 · All buy · 不买不可能', 豆瓣拼组: '拼组 · 我跟你拼了！' };
   let page = 1;
   const PER_PAGE = 20;
 
@@ -202,7 +206,13 @@
     $('hint').textContent = tab === 'hot'
       ? '跟帖越多、越快，排得越靠前。只有豆瓣小组有回复数。'
       : '按发帖时间排，最新的在最上面。';
-    const all = tab === 'hot' ? data.hot : data.latest;
+    const list = tab === 'hot' ? data.hot : data.latest;
+    const groups = ['豆瓣买组', '豆瓣拼组'];
+    const gcount = (g) => list.filter((d) => d.source === g).length;
+    $('grp').innerHTML = [['', '全部小组', list.length], ...groups.map((g) => [g, GROUP_NAMES[g], gcount(g)])]
+      .map(([g, label, n]) => `<button type="button" data-g="${esc(g)}" aria-pressed="${g === grp}">${esc(label)} <span class="n">${n}</span></button>`)
+      .join('');
+    const all = list.filter((d) => !grp || d.source === grp);
     const counts = {};
     for (const d of all) counts[d.category] = (counts[d.category] || 0) + 1;
     const cats = (data.categories || []).filter((c) => counts[c]);
@@ -278,7 +288,15 @@
     b.textContent = data && data.updatedAt !== before ? '已更新' : '已是最新';
     setTimeout(() => { b.textContent = '刷新'; b.disabled = false; }, 1500);
   };
-  $('prev').onclick =() => { page--; render(); toTop(); };
+  $('grp').onclick = (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    grp = b.dataset.g;
+    page = 1;
+    store.set('grp', grp);
+    render();
+  };
+  $('prev').onclick = () => { page--; render(); toTop(); };
   $('next').onclick = () => { page++; render(); toTop(); };
   load();
   setInterval(load, 2 * 60 * 1000);
