@@ -25,3 +25,12 @@
 
 ## Known issues
 - Price guess from free text is heuristic; some titles have no price.
+
+## 2026-11-19 later
+- Dropped 什么值得买 (user: low quality). Site now has group filter (买组/拼组), 11 categories
+  (`src/category.js`), 20-per-page paging, refresh button; publishes every 5 min; Douban lists read with `type=new`.
+- Optional login: user's spare Douban account cookie in `secrets/douban-cookie.txt` (git-ignored),
+  saved by the user with `set-douban-cookie.ps1` (never via chat). Collector re-reads it and lifts pauses.
+- WAITING: user will provide the spare account later. Until then Douban blocks visitors → site shows 0 items.
+- GitHub prior art: gakkiismywife/douban_spider (watches 买组, rotates paid proxies — we won't),
+  lesywix/douban_group_spy (needs login cookie, slow).
