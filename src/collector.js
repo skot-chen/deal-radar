@@ -1,6 +1,6 @@
 // 线报雷达 collector: polls the sources, keeps state in runs/, logs good deals.
 // Usage: node src/collector.js [--once] [--hours 24]
-import { mkdirSync, readFileSync, writeFileSync, appendFileSync, renameSync, existsSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, appendFileSync, renameSync, existsSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { parseDoubanList, parseDoubanTopic, parseRss } from './parse.js';
@@ -51,15 +51,30 @@ function saveState(s) {
 
 class Blocked extends Error {}
 
+// The user's own spare Douban account. They paste its cookie with set-douban-cookie.ps1;
+// the file is git-ignored and never published. Re-read every request so a new cookie works without restart.
+const COOKIE_FILE = join(ROOT, 'secrets', 'douban-cookie.txt');
+function doubanCookie() {
+  try {
+    return readFileSync(COOKIE_FILE, 'utf8').replace(/^cookie:\s*/i, '').replace(/[\r\n]+/g, '').trim();
+  } catch {
+    return '';
+  }
+}
+
 async function get(state, url, sourceKey) {
   state.stats.requests++;
+  const cookie = sourceKey === 'douban' ? doubanCookie() : '';
   const res = await fetch(url, {
-    headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9' },
+    headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9', ...(cookie ? { Cookie: cookie } : {}) },
     redirect: 'manual',
     signal: AbortSignal.timeout(25000),
   });
   const loc = res.headers.get('location') ?? '';
   // Douban sends robots to a verification page. We stop and wait; we never try to get past it.
+  if (cookie && /accounts\.douban\.com|passport/.test(loc)) {
+    throw new Blocked(`douban login expired — run set-douban-cookie.ps1 again`);
+  }
   if (res.status === 403 || res.status === 418 || /sec\.douban\.com|accounts\.douban\.com|passport/.test(loc)) {
     throw new Blocked(`${sourceKey} blocked (${res.status} ${loc.slice(0, 60)})`);
   }
@@ -142,6 +157,14 @@ async function fetchTopic(state, p, latestPage) {
 }
 
 async function doubanRound(state, firstRound) {
+  // A newly saved login cookie lifts any pause straight away.
+  const mtime = existsSync(COOKIE_FILE) ? statSync(COOKIE_FILE).mtimeMs : 0;
+  if (mtime && mtime !== state.cookieMtime) {
+    state.cookieMtime = mtime;
+    delete state.pausedUntil.douban;
+    delete state.pausedUntil['douban-topic'];
+    log('login', { msg: 'douban login cookie found — reading as the spare account' });
+  }
   if (Date.now() < Date.parse(state.pausedUntil.douban ?? 0)) return;
   const queue = [];
   for (const g of SOURCES.douban) {
