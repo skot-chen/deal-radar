@@ -108,3 +108,29 @@ test('same product across sources is detected', () => {
   assert.ok(overlap(a, b) > 0.25, String(overlap(a, b)));
   assert.ok(overlap(a, c) < 0.1);
 });
+
+import { categorize } from '../src/category.js';
+test('deals are sorted into simple categories', () => {
+  const cases = {
+    '【作业】刷券格力高11包小饼干+loopy收纳箱到手5.68': '零食生鲜',
+    '【作业】科瑞德吹风机4060好价，到手140左右': '数码家电',
+    '【作业】微信支付摇优惠送免费瑞幸1+4杯': '外卖餐饮',
+    '【作业】14.6💰6瓶水卫士洗衣机清洗剂': '日用家居',
+    '【作业】3元入手2瓶滋色隔离霜 最低零元购': '美妆个护',
+    '【作业】工行立减金': '银行支付',
+    '【作业】秘密世界内裤4.3一条，需刷券': '服饰鞋包',
+    '【作业】母婴类刷券-酷骑扭扭车N3 88左右': '母婴儿童',
+    '【作业】彩虹电热毯1.5*1.2米14块！': '数码家电',
+    '【作业】3元左右到手40包买给父母的膝盖暖贴': '日用家居',
+    '【作业】去jd捡钱': '其他',
+  };
+  for (const [title, cat] of Object.entries(cases)) assert.equal(categorize(title), cat, title);
+});
+
+test('more categories and "30+" prices', () => {
+  assert.equal(categorize('【作业】德佑湿厕纸80抽单价4.1r'), '日用家居');
+  assert.equal(categorize('【作业】3块多买90包泡脚包'), '日用家居');
+  assert.equal(categorize('【作业】刷券30+买keep 4kg*2铸铁哑铃'), '运动户外');
+  assert.equal(extractPrice('【作业】刷券30+买keep 4kg*2铸铁哑铃'), 30);
+  assert.equal(extractPrice('【作业】微信支付摇优惠送免费瑞幸1+4杯'), null);
+});

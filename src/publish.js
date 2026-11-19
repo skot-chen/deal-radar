@@ -5,19 +5,29 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { heat, isHidden } from './report.js';
+import { categorize, ALL_CATEGORIES } from './category.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REMOTE = 'https://github.com/skot-chen/deal-radar.git';
+// Click-for-me threads (助力 / 互点 / 福袋) are other people's invite farms, not deals.
+const INVITE_TITLE = /助力|互点|互助|帮砍|砍一刀|福袋|求点|拉人/;
+// Year-old threads with 10k+ replies are chat rooms, not today's hot deals.
+const MEGA_THREAD = 3000;
 const SHORT = { '买组 & All buy & 不买不可能': '豆瓣买组', '拼组 / 我跟你拼了！': '豆瓣拼组', 什么值得买: '什么值得买' };
 
 /** Public data only: titles, links, prices, counts. No comment text, no usernames. */
 export function buildDeals(state, nowMs = Date.now()) {
   const posted = (p) => p.created ?? p.firstSeen;
-  const visible = Object.values(state.posts).filter((p) => !isHidden(p));
+  const weekAgo = nowMs - 7 * 24 * 3600e3;
+  // Only Douban groups are published (什么值得买 was dropped as low quality).
+  const visible = Object.values(state.posts).filter(
+    (p) => p.source === 'douban' && !isHidden(p) && !INVITE_TITLE.test(p.title) && Date.parse(posted(p)) >= weekAgo,
+  );
   const pick = (p) => ({
     title: p.title,
     url: p.url,
     source: SHORT[p.group] ?? p.group,
+    category: categorize(p.title, p.body ?? ''),
     posted: posted(p),
     price: p.price ?? null,
     lower: p.lowerInComments ?? null,
@@ -26,12 +36,12 @@ export function buildDeals(state, nowMs = Date.now()) {
   });
   const twoDaysAgo = nowMs - 48 * 3600e3;
   const hot = visible
-    .filter((p) => (heat(p, nowMs) ?? 0) >= 1 && Date.parse(posted(p)) >= twoDaysAgo)
+    .filter((p) => (heat(p, nowMs) ?? 0) >= 1 && (p.replies ?? 0) <= MEGA_THREAD && Date.parse(posted(p)) >= twoDaysAgo)
     .sort((a, b) => heat(b, nowMs) - heat(a, nowMs))
-    .slice(0, 30)
+    .slice(0, 60)
     .map(pick);
-  const latest = [...visible].sort((a, b) => posted(b).localeCompare(posted(a))).slice(0, 100).map(pick);
-  return { updatedAt: new Date(nowMs).toISOString(), count: visible.length, hot, latest };
+  const latest = [...visible].sort((a, b) => posted(b).localeCompare(posted(a))).slice(0, 300).map(pick);
+  return { updatedAt: new Date(nowMs).toISOString(), count: visible.length, categories: ALL_CATEGORIES, hot, latest };
 }
 
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();

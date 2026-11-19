@@ -20,14 +20,15 @@ export const SOURCES = {
     { id: '698716', name: '买组 & All buy & 不买不可能' },
     { id: '536786', name: '拼组 / 我跟你拼了！' },
   ],
-  rss: [{ id: 'smzdm', name: '什么值得买', url: 'http://feed.smzdm.com' }],
+  // 什么值得买 removed 2026-11-19: the user found its items low quality.
+  rss: [],
 };
 const DOUBAN_EVERY_MIN = 5;
 const RSS_EVERY_MIN = 3;
 const MAX_TOPIC_FETCHES = 8; // per douban round, keeps us gentle
 const REFRESH_COMMENTS_MIN = 20;
 const ALERT_SCORE = 6;
-const PUBLISH_EVERY_MIN = 10;
+const PUBLISH_EVERY_MIN = 5;
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36';
 const PRICE_CUE = /(到手|实付|更低|更便宜|才|只要|一共|合计|总共|叠加|用了|我买|我拍|入手|拿下|最低)/;
 

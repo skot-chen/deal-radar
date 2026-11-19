@@ -61,6 +61,14 @@
   .lede { margin: 6px 0 0; color: var(--pencil); font-size: 14px; max-width: 32em; }
   .status { margin: 4px 0 0; font-size: 13px; color: var(--pencil); }
   .status.stale { color: var(--red); }
+  .statusbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+  .statusbar .status { margin: 0; }
+  #refresh {
+    flex: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--red); cursor: pointer;
+    background: transparent; border: 2px solid var(--red); border-radius: 999px; padding: 4px 16px; min-height: 36px;
+  }
+  #refresh:disabled { opacity: .55; cursor: default; }
+  #refresh:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
   nav { display: flex; gap: 6px; margin: 22px 0 6px; }
   nav button {
@@ -77,7 +85,17 @@
     font: inherit; font-size: 13px; color: var(--pencil); background: transparent; cursor: pointer;
     border: 1.5px solid var(--rule); border-radius: 999px; padding: 1px 12px;
   }
-  .src button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+  .src button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); background: var(--tab); }
+  .src .n { font-size: 11px; opacity: .7; }
+  .tag { color: var(--ink); }
+  .pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 0 0; font-size: 14px; color: var(--pencil); }
+  .pager[hidden] { display: none; }
+  .pager button {
+    font: inherit; font-weight: 700; color: var(--ink); background: var(--tab); cursor: pointer;
+    border: 1.5px solid var(--rule); border-radius: 10px; padding: 8px 18px; min-height: 44px;
+  }
+  .pager button:disabled { color: var(--pencil); opacity: .5; cursor: default; }
+  .pager button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
   ol { list-style: none; margin: 0; padding: 0; }
   li { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 12px 0 13px; border-bottom: 1px dashed var(--rule); }
@@ -119,17 +137,25 @@
 <div class="page">
   <header>
     <h1>线报雷达</h1>
-    <p class="lede">自动收集豆瓣买组、拼组和什么值得买的省钱作业。返利链接和口令已经去掉，点开就是原帖。</p>
-    <p class="status" id="status" role="status">正在载入…</p>
+    <p class="lede">自动收集豆瓣买组、拼组的省钱作业，按分类整理好。返利链接和口令已经去掉，点开就是原帖。</p>
+    <div class="statusbar">
+      <p class="status" id="status" role="status">正在载入…</p>
+      <button type="button" id="refresh">刷新</button>
+    </div>
   </header>
 
-  <nav role="tablist" aria-label="排序">
+  <nav role="tablist" aria-label="排序" id="tabs">
     <button role="tab" id="tab-hot" aria-selected="true" aria-controls="list">🔥 最热</button>
     <button role="tab" id="tab-new" aria-selected="false" aria-controls="list">🆕 最新</button>
   </nav>
   <p class="hint" id="hint"></p>
-  <div class="src" id="src" aria-label="只看某个来源"></div>
+  <div class="src" id="cat" role="group" aria-label="按分类看"></div>
   <ol id="list" role="tabpanel" aria-live="polite"></ol>
+  <div class="pager" id="pager" hidden>
+    <button type="button" id="prev">上一页</button>
+    <span id="pageinfo"></span>
+    <button type="button" id="next">下一页</button>
+  </div>
 
   <footer>
     <p>到手价是从帖子标题里自动读出来的，下单前请以页面实际价格为准。</p>
@@ -146,7 +172,9 @@
   };
   let data = null;
   let tab = store.get('tab') === 'new' ? 'new' : 'hot';
-  let source = store.get('source') || '';
+  let cat = store.get('cat') || '';
+  let page = 1;
+  const PER_PAGE = 20;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const yuan = (v) => (v == null ? '' : '¥' + (Number.isInteger(v) ? v : v.toFixed(2).replace(/0$/, '')));
@@ -175,18 +203,34 @@
       ? '跟帖越多、越快，排得越靠前。只有豆瓣小组有回复数。'
       : '按发帖时间排，最新的在最上面。';
     const all = tab === 'hot' ? data.hot : data.latest;
-    const sources = [...new Set(data.latest.map((d) => d.source))];
-    $('src').innerHTML = ['', ...sources]
-      .map((s) => `<button type="button" data-s="${esc(s)}" aria-pressed="${s === source}">${s ? esc(s) : '全部'}</button>`)
+    const counts = {};
+    for (const d of all) counts[d.category] = (counts[d.category] || 0) + 1;
+    const cats = (data.categories || []).filter((c) => counts[c]);
+    if (cat && !counts[cat]) cat = '';
+    $('cat').innerHTML = [['', all.length], ...cats.map((c) => [c, counts[c]])]
+      .map(([c, n]) => `<button type="button" data-c="${esc(c)}" aria-pressed="${c === cat}">${c ? esc(c) : '全部'} <span class="n">${n}</span></button>`)
       .join('');
-    const rows = all.filter((d) => !source || d.source === source);
-    $('list').innerHTML = rows.length
-      ? rows.map((d) => `<li>
+    const rows = all.filter((d) => !cat || d.category === cat);
+    const pages = Math.max(1, Math.ceil(rows.length / PER_PAGE));
+    page = Math.min(Math.max(1, page), pages);
+    const shown = rows.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+    $('list').innerHTML = shown.length
+      ? shown.map((d) => `<li>
           <a href="${esc(d.url)}" target="_blank" rel="noopener noreferrer">${esc(d.title)}</a>
           ${priceHtml(d)}
-          <div class="meta"><span>${esc(d.source)}</span><span>${ago(d.posted)}</span>${d.replies != null ? `<span>${d.replies} 回复</span>` : ''}${d.heat >= 1 ? `<span class="fire">每小时 +${Math.round(d.heat)} 回复</span>` : ''}</div>
+          <div class="meta"><span class="tag">${esc(d.category)}</span><span>${esc(d.source)}</span><span>${ago(d.posted)}</span>${d.replies != null ? `<span>${d.replies} 回复</span>` : ''}${d.heat >= 1 ? `<span class="fire">每小时 +${Math.round(d.heat)} 回复</span>` : ''}</div>
         </li>`).join('')
-      : `<li class="empty">${tab === 'hot' ? '现在没有正在变热的作业，看看“最新”吧。' : '这个来源暂时还没有新作业。'}</li>`;
+      : `<li class="empty">${emptyText()}</li>`;
+    $('pager').hidden = pages <= 1;
+    $('prev').disabled = page <= 1;
+    $('next').disabled = page >= pages;
+    $('pageinfo').textContent = `第 ${page} / ${pages} 页`;
+  }
+
+  function emptyText() {
+    if (!data.latest.length) return '豆瓣暂时不让访客查看小组，正在等它恢复。恢复后新的作业会自动出现在这里。';
+    if (tab === 'hot') return '现在没有正在变热的作业，看看“最新”吧。';
+    return '这个分类暂时还没有作业。';
   }
 
   function renderStatus() {
@@ -214,15 +258,28 @@
     }
   }
 
-  $('tab-hot').onclick = () => { tab = 'hot'; store.set('tab', tab); render(); };
-  $('tab-new').onclick = () => { tab = 'new'; store.set('tab', tab); render(); };
-  $('src').onclick = (e) => {
+  const toTop = () => $('tabs').scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  $('tab-hot').onclick = () => { tab = 'hot'; page = 1; store.set('tab', tab); render(); };
+  $('tab-new').onclick = () => { tab = 'new'; page = 1; store.set('tab', tab); render(); };
+  $('cat').onclick = (e) => {
     const b = e.target.closest('button');
     if (!b) return;
-    source = b.dataset.s;
-    store.set('source', source);
+    cat = b.dataset.c;
+    page = 1;
+    store.set('cat', cat);
     render();
   };
+  $('refresh').onclick = async () => {
+    const b = $('refresh');
+    const before = data && data.updatedAt;
+    b.disabled = true;
+    b.textContent = '刷新中…';
+    await load();
+    b.textContent = data && data.updatedAt !== before ? '已更新' : '已是最新';
+    setTimeout(() => { b.textContent = '刷新'; b.disabled = false; }, 1500);
+  };
+  $('prev').onclick =() => { page--; render(); toTop(); };
+  $('next').onclick = () => { page++; render(); toTop(); };
   load();
   setInterval(load, 2 * 60 * 1000);
   setInterval(renderStatus, 30 * 1000);

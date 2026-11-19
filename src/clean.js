@@ -117,6 +117,8 @@ export function extractPrice(text) {
   const strong = [
     new RegExp(`(?:到手价?|实付|最低|只要|仅需?|才|合计|一共|总共|共)\\s*[:：约]?\\s*[¥￥]?\\s*${NUM}`, 'g'),
     new RegExp(`${NUM}\\s*(?:元|块|r|R)?\\s*(?:到手|入手|拿下)`, 'g'),
+    // "30+" (a bit more than 30)
+    new RegExp(`(?<![\\d.])${NUM}\\s*(?:元|块|r|R)?\\+(?!\\d)`, 'g'),
     // "88左右", "20不到", "10r不到"
     new RegExp(`${NUM}\\s*(?:元|块|r|R)?\\s*(?:左右|不到|以内|出头)`, 'g'),
     // "33r", "23.7r买" — r = 元 in shopping slang
