@@ -211,5 +211,9 @@
         }
       ]
     }
-  ]
+  ],
+  "open": {
+    "url": "https://main.m.taobao.com/",
+    "app": "淘宝"
+  }
 }

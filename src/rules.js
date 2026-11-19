@@ -23,6 +23,8 @@ export function validatePlatform(p) {
   need(typeof p.summary === 'string' && p.summary.length > 0, 'summary');
   need(Array.isArray(p.stackOrder) && p.stackOrder.length > 0, 'stackOrder');
   need(Array.isArray(p.coupons) && p.coupons.length > 0, 'coupons');
+  // The "去领取" button: official site only, no tracking / rebate parameters.
+  need(p.open && /^https:\/\/[^/?#]+\/[^?#]*$/.test(p.open.url ?? '') && p.open.app, 'open link (https, no query string)');
   if (p.example) {
     const sum = p.example.steps.reduce((n, s) => n + Number(s.amount), 0);
     need(Math.abs(sum - p.example.final) < 0.011, `example adds up to ${sum}, not ${p.example.final}`);

@@ -200,6 +200,24 @@
   .calc .add { font: inherit; font-weight: 700; color: var(--ink); background: var(--tab); border: 1.5px solid var(--rule); border-radius: 10px; padding: 6px 14px; cursor: pointer; margin-top: 6px; min-height: 40px; }
   .calc .out { margin-top: 14px; }
   .calc .tip { font-size: 14px; color: var(--red); margin-top: 6px; }
+  .steps { counter-reset: st; margin: 8px 0 0; padding: 0; }
+  .steps li { display: block; border: none; padding: 3px 0 3px 30px; position: relative; font-size: 15px; }
+  .steps li::before {
+    counter-increment: st; content: counter(st); position: absolute; left: 0; top: 5px; width: 21px; height: 21px; border-radius: 50%;
+    background: var(--ink); color: var(--paper); font: 700 12px/21px -apple-system, sans-serif; text-align: center;
+  }
+  .when { margin: 6px 0 0; color: var(--red); font-weight: 700; font-size: 14px; }
+  .go {
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 10px; min-height: 44px; padding: 0 22px;
+    background: var(--red); color: #fff; font-weight: 700; font-size: 16px; text-decoration: none; border-radius: 999px;
+  }
+  .go:visited { color: #fff; }
+  .go:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  details.why, details.rules { margin-top: 8px; }
+  details.why summary, details.rules summary { cursor: pointer; font-size: 13px; color: var(--pencil); padding: 4px 0; }
+  details.rules { border-top: 1px dashed var(--rule); padding-top: 8px; margin-top: 14px; }
+  details.rules summary { font-size: 15px; color: var(--ink); font-weight: 700; }
+  details.rules .order { margin: 8px 0 12px; }
   .foot-note { font-size: 13px; color: var(--pencil); }
   footer { margin-top: 28px; font-size: 13px; color: var(--pencil); }
   footer p { margin: 4px 0; }
@@ -215,7 +233,7 @@
 <div class="page">
   <header>
     <h1>线报雷达</h1>
-    <p class="lede">淘宝、京东、拼多多、美团、饿了么的券怎么领、几点抢、怎么叠加最划算，一页看懂。</p>
+    <p class="lede">选平台，照着 1、2、3 做，点红色按钮直接去领券。</p>
   </header>
 
   <div class="views" role="tablist" aria-label="切换内容">

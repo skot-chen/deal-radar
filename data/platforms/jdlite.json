@@ -12,9 +12,18 @@
   "example": {
     "title": "买一件特价 29.9 元的日用品",
     "steps": [
-      { "label": "页面特价", "amount": 29.9 },
-      { "label": "店铺券（举例）", "amount": -3 },
-      { "label": "红包（举例）", "amount": -1.9 }
+      {
+        "label": "页面特价",
+        "amount": 29.9
+      },
+      {
+        "label": "店铺券（举例）",
+        "amount": -3
+      },
+      {
+        "label": "红包（举例）",
+        "amount": -1.9
+      }
     ],
     "final": 25,
     "note": "金额是举例，无官方叠加顺序；以结算页为准。"
@@ -30,7 +39,10 @@
       "tips": "以下内容里旧攻略居多，规则可能已变。",
       "status": "check",
       "sources": [
-        { "title": "京东特价版（App Store）", "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111" }
+        {
+          "title": "京东特价版（App Store）",
+          "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111"
+        }
       ]
     },
     {
@@ -43,8 +55,14 @@
       "tips": "旧攻略（约2020年），金额和门槛以App内为准。",
       "status": "check",
       "sources": [
-        { "title": "京东极速版签到领现金玩法（3DM）", "url": "https://shouyou.3dmgame.com/gl/192188.html" },
-        { "title": "京东极速版正确打开方式（什么值得买）", "url": "https://post.smzdm.com/p/a9gennkp/" }
+        {
+          "title": "京东极速版签到领现金玩法（3DM）",
+          "url": "https://shouyou.3dmgame.com/gl/192188.html"
+        },
+        {
+          "title": "京东极速版正确打开方式（什么值得买）",
+          "url": "https://post.smzdm.com/p/a9gennkp/"
+        }
       ]
     },
     {
@@ -57,7 +75,10 @@
       "tips": "低价商品注意看规格和运费说明。",
       "status": "check",
       "sources": [
-        { "title": "京东特价版（App Store）", "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111" }
+        {
+          "title": "京东特价版（App Store）",
+          "url": "https://apps.apple.com/cn/app/%E4%BA%AC%E4%B8%9C%E7%89%B9%E4%BB%B7%E7%89%88/id1500875111"
+        }
       ]
     },
     {
@@ -70,7 +91,10 @@
       "tips": "这是京东通用规则，极速版是否完全一样请看券说明。",
       "status": "check",
       "sources": [
-        { "title": "京东帮助中心：优惠券规则", "url": "https://help.jd.com/user/issue/169-1077.html" }
+        {
+          "title": "京东帮助中心：优惠券规则",
+          "url": "https://help.jd.com/user/issue/169-1077.html"
+        }
       ]
     },
     {
@@ -83,8 +107,15 @@
       "tips": "买大件前先在主App对比价格。",
       "status": "check",
       "sources": [
-        { "title": "京东优惠券攻略2026（新浪）", "url": "https://finance.sina.cn/2026-08-31/detail-iniqexuv8978332.d.html?vt=4" }
+        {
+          "title": "京东优惠券攻略2026（新浪）",
+          "url": "https://finance.sina.cn/2026-08-31/detail-iniqexuv8978332.d.html?vt=4"
+        }
       ]
     }
-  ]
+  ],
+  "open": {
+    "url": "https://m.jd.com/",
+    "app": "京东"
+  }
 }

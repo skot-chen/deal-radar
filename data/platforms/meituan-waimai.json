@@ -13,10 +13,22 @@
   "example": {
     "title": "点一单外卖，商品42元",
     "steps": [
-      { "label": "商品原价", "amount": 42 },
-      { "label": "店铺满减", "amount": -6 },
-      { "label": "膨胀后的神券（38减18）", "amount": -18 },
-      { "label": "配送费", "amount": 3 }
+      {
+        "label": "商品原价",
+        "amount": 42
+      },
+      {
+        "label": "店铺满减",
+        "amount": -6
+      },
+      {
+        "label": "膨胀后的神券（38减18）",
+        "amount": -18
+      },
+      {
+        "label": "配送费",
+        "amount": 3
+      }
     ],
     "final": 21,
     "note": "数字是举例；神券门槛按什么金额算、能否叠满减，以结算页为准"
@@ -32,7 +44,10 @@
       "tips": "有效期常很短（攻略说1到3天），先看“我的红包”里的到期时间。",
       "status": "ok",
       "sources": [
-        { "title": "美团外卖优惠规则（官方）", "url": "https://i.waimai.meituan.com/c/discount_rules/index.html?terminal=mtapp" }
+        {
+          "title": "美团外卖优惠规则（官方）",
+          "url": "https://i.waimai.meituan.com/c/discount_rules/index.html?terminal=mtapp"
+        }
       ]
     },
     {
@@ -45,8 +60,14 @@
       "tips": "先膨胀到满意面额再付款。膨胀后可能只限带“膨胀”标签的商家。",
       "status": "ok",
       "sources": [
-        { "title": "IT之家：美团神券规则（2026-04）", "url": "https://www.ithome.com/0/943/430.htm" },
-        { "title": "IT之家：5元膨胀神券", "url": "https://www.ithome.com/0/910/016.htm" }
+        {
+          "title": "IT之家：美团神券规则（2026-04）",
+          "url": "https://www.ithome.com/0/943/430.htm"
+        },
+        {
+          "title": "IT之家：5元膨胀神券",
+          "url": "https://www.ithome.com/0/910/016.htm"
+        }
       ]
     },
     {
@@ -59,7 +80,10 @@
       "tips": "有攻略说宝箱每天0点刷新，但官方没公布，所以不写死时间。",
       "status": "check",
       "sources": [
-        { "title": "知乎：美团外卖神券签到攻略（2026-04）", "url": "https://www.zhihu.com/tardis/jm/art/2023781428685456740" }
+        {
+          "title": "知乎：美团外卖神券签到攻略（2026-04）",
+          "url": "https://www.zhihu.com/tardis/jm/art/2023781428685456740"
+        }
       ]
     },
     {
@@ -72,8 +96,14 @@
       "tips": "价格和张数常变，没有官方固定日期；算好每月点单次数再买。",
       "status": "check",
       "sources": [
-        { "title": "IT之家：美团会员升级报道", "url": "https://www.ithome.com/0/910/016.htm" },
-        { "title": "知乎：美团会员与神会员（旧文）", "url": "https://www.zhihu.com/tardis/jm/art/2023011057615021698" }
+        {
+          "title": "IT之家：美团会员升级报道",
+          "url": "https://www.ithome.com/0/910/016.htm"
+        },
+        {
+          "title": "知乎：美团会员与神会员（旧文）",
+          "url": "https://www.zhihu.com/tardis/jm/art/2023011057615021698"
+        }
       ]
     },
     {
@@ -86,8 +116,14 @@
       "tips": "2025年美团提高了入驻门槛，质量更稳；限量商品要及时抢。",
       "status": "check",
       "sources": [
-        { "title": "IT之家：神抢手发券事件", "url": "https://www.ithome.com/0/873/547.htm" },
-        { "title": "每日经济新闻：外卖补贴报道（2025-07）", "url": "https://www.nbd.com.cn/articles/2025-07-13/3942282.html" }
+        {
+          "title": "IT之家：神抢手发券事件",
+          "url": "https://www.ithome.com/0/873/547.htm"
+        },
+        {
+          "title": "每日经济新闻：外卖补贴报道（2025-07）",
+          "url": "https://www.nbd.com.cn/articles/2025-07-13/3942282.html"
+        }
       ]
     },
     {
@@ -100,7 +136,10 @@
       "tips": "2025年美团取消了拼单满减等十几项商家活动，满减规则更简单了。",
       "status": "ok",
       "sources": [
-        { "title": "新华网：美团精简商家营销活动（2026-02）", "url": "https://www.news.cn/tech/20260206/c7b07567faaa46eeb610a25e6b8718ae/c.html" }
+        {
+          "title": "新华网：美团精简商家营销活动（2026-02）",
+          "url": "https://www.news.cn/tech/20260206/c7b07567faaa46eeb610a25e6b8718ae/c.html"
+        }
       ]
     },
     {
@@ -113,10 +152,23 @@
       "tips": "已经很便宜，不用再花时间找券；只是不能叠神券。",
       "status": "check",
       "sources": [
-        { "title": "IT之家：美团神券规则（拼好饭不叠）", "url": "https://www.ithome.com/0/943/430.htm" },
-        { "title": "人人都是产品经理：拼好饭介绍", "url": "https://www.woshipm.com/it/6253081.html" },
-        { "title": "App Store：美团（拼好饭0配送费介绍）", "url": "https://apps.apple.com/hk/app/app/id737310995" }
+        {
+          "title": "IT之家：美团神券规则（拼好饭不叠）",
+          "url": "https://www.ithome.com/0/943/430.htm"
+        },
+        {
+          "title": "人人都是产品经理：拼好饭介绍",
+          "url": "https://www.woshipm.com/it/6253081.html"
+        },
+        {
+          "title": "App Store：美团（拼好饭0配送费介绍）",
+          "url": "https://apps.apple.com/hk/app/app/id737310995"
+        }
       ]
     }
-  ]
+  ],
+  "open": {
+    "url": "https://h5.waimai.meituan.com/",
+    "app": "美团外卖"
+  }
 }

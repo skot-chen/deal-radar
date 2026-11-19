@@ -214,5 +214,9 @@
         }
       ]
     }
-  ]
+  ],
+  "open": {
+    "url": "https://www.tmall.com/",
+    "app": "天猫"
+  }
 }
