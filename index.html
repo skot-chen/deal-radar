@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>线报雷达</title>
+<meta name="description" content="自动收集省钱作业：豆瓣买组、拼组和什么值得买的最新、最热线报，已去掉返利链接。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="线报雷达">
+<meta name="theme-color" content="#eef2e6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#18201b" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23eef2e6'/%3E%3Cellipse cx='32' cy='33' rx='22' ry='17' fill='none' stroke='%23d0271d' stroke-width='5' transform='rotate(-8 32 33)'/%3E%3Ctext x='32' y='42' font-size='24' text-anchor='middle' fill='%23d0271d' font-family='sans-serif' font-weight='700'%3E¥%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #eef2e6;      /* exercise-book green */
+    --rule: #cddbc3;       /* ruled lines */
+    --margin: #e6a9a3;     /* red margin line */
+    --ink: #1c2b45;        /* fountain-pen blue-black */
+    --pencil: #66705f;     /* secondary text */
+    --red: #d0271d;        /* teacher's red pen */
+    --tab: #dfe8d3;
+    --focus: #1c55c9;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #18201b; --rule: #27342b; --margin: #5a2d2a; --ink: #e3e9dc;
+      --pencil: #9aa592; --red: #ff6a5c; --tab: #213026; --focus: #8fb4ff; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #18201b; --rule: #27342b; --margin: #5a2d2a; --ink: #e3e9dc;
+    --pencil: #9aa592; --red: #ff6a5c; --tab: #213026; --focus: #8fb4ff; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 16px/1.7 -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    /* ruled exercise-book lines, 34px apart */
+    background-image: linear-gradient(to bottom, transparent 33px, var(--rule) 33px, var(--rule) 34px);
+    background-size: 100% 34px;
+    background-attachment: local;
+    min-height: 100vh;
+  }
+  .page {
+    max-width: 680px; margin: 0 auto; position: relative;
+    padding: max(20px, env(safe-area-inset-top)) 16px 64px 40px;
+  }
+  /* red margin line down the left, like a school notebook */
+  .page::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 26px; width: 2px; background: var(--margin);
+  }
+  header h1 {
+    margin: 6px 0 0; font-size: 30px; line-height: 1.2; letter-spacing: .02em;
+    font-family: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif; font-weight: 900;
+  }
+  .lede { margin: 6px 0 0; color: var(--pencil); font-size: 14px; max-width: 32em; }
+  .status { margin: 4px 0 0; font-size: 13px; color: var(--pencil); }
+  .status.stale { color: var(--red); }
+
+  nav { display: flex; gap: 6px; margin: 22px 0 6px; }
+  nav button {
+    font: inherit; font-size: 16px; font-weight: 700; color: var(--pencil); cursor: pointer;
+    background: transparent; border: 2px solid transparent; border-bottom: none;
+    padding: 6px 18px 4px; border-radius: 10px 10px 0 0;
+  }
+  nav button[aria-selected="true"] { color: var(--ink); background: var(--tab); border-color: var(--rule); }
+  nav button:focus-visible, a:focus-visible, .src button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .hint { font-size: 13px; color: var(--pencil); margin: 0 0 6px; }
+
+  .src { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+  .src button {
+    font: inherit; font-size: 13px; color: var(--pencil); background: transparent; cursor: pointer;
+    border: 1.5px solid var(--rule); border-radius: 999px; padding: 1px 12px;
+  }
+  .src button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+
+  ol { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; padding: 12px 0 13px; border-bottom: 1px dashed var(--rule); }
+  li a { color: var(--ink); text-decoration: none; font-size: 16px; line-height: 1.55; overflow-wrap: anywhere; }
+  li a:hover { text-decoration: underline; text-decoration-color: var(--red); }
+  li a:visited { color: var(--pencil); }
+  .meta { grid-column: 1; font-size: 13px; color: var(--pencil); display: flex; flex-wrap: wrap; gap: 0 12px; }
+  .fire { color: var(--red); }
+
+  /* the one bold element: the price, circled in red pen */
+  .price {
+    grid-column: 2; grid-row: 1 / span 2; align-self: center; justify-self: end;
+    font-family: "Caveat", "Segoe Print", cursive; font-weight: 700; color: var(--red);
+    font-size: 26px; line-height: 1; white-space: nowrap; text-align: center; position: relative;
+    padding: 8px 12px; min-width: 64px;
+  }
+  .price::after {
+    content: ""; position: absolute; inset: 0; border: 2px solid var(--red); border-radius: 50%;
+    transform: rotate(-6deg); opacity: .85;
+  }
+  .price.long { font-size: 20px; }
+  .price.none { color: var(--pencil); font-size: 18px; }
+  .price.none::after { display: none; }
+  .price s { display: block; font-size: 17px; color: var(--pencil); text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+  .price small { display: block; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 11px; font-weight: 400; color: var(--red); margin-top: 2px; }
+
+  .empty { padding: 24px 0; color: var(--pencil); }
+  footer { margin-top: 28px; font-size: 13px; color: var(--pencil); }
+  footer p { margin: 4px 0; }
+  @media (max-width: 420px) {
+    .page { padding-left: 32px; }
+    .page::before { left: 18px; }
+    header h1 { font-size: 26px; }
+    .price { font-size: 23px; min-width: 56px; padding: 7px 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>线报雷达</h1>
+    <p class="lede">自动收集豆瓣买组、拼组和什么值得买的省钱作业。返利链接和口令已经去掉，点开就是原帖。</p>
+    <p class="status" id="status" role="status">正在载入…</p>
+  </header>
+
+  <nav role="tablist" aria-label="排序">
+    <button role="tab" id="tab-hot" aria-selected="true" aria-controls="list">🔥 最热</button>
+    <button role="tab" id="tab-new" aria-selected="false" aria-controls="list">🆕 最新</button>
+  </nav>
+  <p class="hint" id="hint"></p>
+  <div class="src" id="src" aria-label="只看某个来源"></div>
+  <ol id="list" role="tabpanel" aria-live="polite"></ol>
+
+  <footer>
+    <p>到手价是从帖子标题里自动读出来的，下单前请以页面实际价格为准。</p>
+    <p>每几分钟自动更新一次；本页不会自动帮你下单或抢券。</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  let data = null;
+  let tab = store.get('tab') === 'new' ? 'new' : 'hot';
+  let source = store.get('source') || '';
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const yuan = (v) => (v == null ? '' : '¥' + (Number.isInteger(v) ? v : v.toFixed(2).replace(/0$/, '')));
+  function ago(iso) {
+    const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
+    if (m < 1) return '刚刚';
+    if (m < 60) return m + ' 分钟前';
+    const h = Math.round(m / 60);
+    if (h < 24) return h + ' 小时前';
+    return Math.round(h / 24) + ' 天前';
+  }
+
+  function priceHtml(d) {
+    if (d.price == null && d.lower == null) return '<div class="price none" aria-label="没写到手价">?</div>';
+    if (d.lower != null && (d.price == null || d.lower < d.price)) {
+      return `<div class="price" aria-label="到手价 ${yuan(d.lower)}，评论区找到的更低价">${d.price != null ? `<s>${yuan(d.price)}</s>` : ''}${yuan(d.lower)}<small>评论区更低</small></div>`;
+    }
+    const p = yuan(d.price);
+    return `<div class="price${p.length > 6 ? ' long' : ''}" aria-label="到手价 ${p}">${p}</div>`;
+  }
+
+  function render() {
+    for (const [id, name] of [['tab-hot', 'hot'], ['tab-new', 'new']]) $(id).setAttribute('aria-selected', String(tab === name));
+    if (!data) return;
+    $('hint').textContent = tab === 'hot'
+      ? '跟帖越多、越快，排得越靠前。只有豆瓣小组有回复数。'
+      : '按发帖时间排，最新的在最上面。';
+    const all = tab === 'hot' ? data.hot : data.latest;
+    const sources = [...new Set(data.latest.map((d) => d.source))];
+    $('src').innerHTML = ['', ...sources]
+      .map((s) => `<button type="button" data-s="${esc(s)}" aria-pressed="${s === source}">${s ? esc(s) : '全部'}</button>`)
+      .join('');
+    const rows = all.filter((d) => !source || d.source === source);
+    $('list').innerHTML = rows.length
+      ? rows.map((d) => `<li>
+          <a href="${esc(d.url)}" target="_blank" rel="noopener noreferrer">${esc(d.title)}</a>
+          ${priceHtml(d)}
+          <div class="meta"><span>${esc(d.source)}</span><span>${ago(d.posted)}</span>${d.replies != null ? `<span>${d.replies} 回复</span>` : ''}${d.heat >= 1 ? `<span class="fire">每小时 +${Math.round(d.heat)} 回复</span>` : ''}</div>
+        </li>`).join('')
+      : `<li class="empty">${tab === 'hot' ? '现在没有正在变热的作业，看看“最新”吧。' : '这个来源暂时还没有新作业。'}</li>`;
+  }
+
+  function renderStatus() {
+    if (!data) return;
+    const mins = (Date.now() - Date.parse(data.updatedAt)) / 60000;
+    const el = $('status');
+    el.className = 'status' + (mins > 30 ? ' stale' : '');
+    el.textContent = mins > 30
+      ? `已经 ${ago(data.updatedAt).replace('前', '')}没有更新了：收集线报的电脑可能暂时关着。下面是最后一次的内容。`
+      : `${ago(data.updatedAt)}更新 · 共 ${data.count} 条作业`;
+  }
+
+  async function load() {
+    try {
+      const r = await fetch('deals.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) throw new Error(r.status);
+      data = await r.json();
+      render();
+      renderStatus();
+    } catch {
+      if (!data) $('status').textContent = '暂时读不到线报数据，请稍后刷新页面。';
+    }
+  }
+
+  $('tab-hot').onclick = () => { tab = 'hot'; store.set('tab', tab); render(); };
+  $('tab-new').onclick = () => { tab = 'new'; store.set('tab', tab); render(); };
+  $('src').onclick = (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    source = b.dataset.s;
+    store.set('source', source);
+    render();
+  };
+  load();
+  setInterval(load, 2 * 60 * 1000);
+  setInterval(renderStatus, 30 * 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+})();
+</script>
+</body>
+</html>
